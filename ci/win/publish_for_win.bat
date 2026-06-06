@@ -47,11 +47,11 @@ set config_path=%script_path%..\..\config
 
 if /i %cpu_mode% == x86 (
     set publish_path=%script_path%%publish_dir%\
-    set release_path=%script_path%..\..\output\x86\RelWithDebInfo
+    set release_path=%script_path%..\..\output\x86\Release
     set qt_msvc_path=%qt_msvc_path%\msvc2019\bin
 ) else (
     set publish_path=%script_path%%publish_dir%\
-    set release_path=%script_path%..\..\output\x64\RelWithDebInfo
+    set release_path=%script_path%..\..\output\x64\Release
     set qt_msvc_path=%qt_msvc_path%\msvc2019_64\bin
 )
 set PATH=%qt_msvc_path%;%PATH%
