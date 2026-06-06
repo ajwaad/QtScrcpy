@@ -1,4 +1,5 @@
 // #include <QDesktopWidget>
+#include <QApplication>
 #include <QFileInfo>
 #include <QLabel>
 #include <QMessageBox>
@@ -81,6 +82,8 @@ void VideoForm::initUI()
     setMouseTracking(true);
     m_videoWidget->setMouseTracking(true);
     ui->keepRatioWidget->setMouseTracking(true);
+
+    qApp->installEventFilter(this);
 }
 
 QRect VideoForm::getGrabCursorRect()
@@ -532,6 +535,7 @@ void VideoForm::updateFPS(quint32 fps)
 
 void VideoForm::grabCursor(bool grab)
 {
+    m_gameModeActive = grab;
     QRect rc = getGrabCursorRect();
     MouseTap::getInstance()->enableMouseEventTap(rc, grab);
 }
@@ -740,6 +744,23 @@ void VideoForm::keyReleaseEvent(QKeyEvent *event)
         return;
     }
     emit device->keyEvent(event, m_videoWidget->frameSize(), m_videoWidget->size());
+}
+
+bool VideoForm::eventFilter(QObject *obj, QEvent *event)
+{
+    if (m_gameModeActive
+        && (event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease)) {
+        QWidget *widget = qobject_cast<QWidget *>(obj);
+        if (widget && (widget == this || isAncestorOf(widget))) {
+            auto device = qsc::IDeviceManage::getInstance().getDevice(m_serial);
+            if (device && m_videoWidget) {
+                QKeyEvent *ke = static_cast<QKeyEvent *>(event);
+                emit device->keyEvent(ke, m_videoWidget->frameSize(), m_videoWidget->size());
+                return true;
+            }
+        }
+    }
+    return QWidget::eventFilter(obj, event);
 }
 
 void VideoForm::paintEvent(QPaintEvent *paint)

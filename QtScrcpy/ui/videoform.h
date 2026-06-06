@@ -58,6 +58,8 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
 
+    bool eventFilter(QObject *obj, QEvent *event) override;
+
     void paintEvent(QPaintEvent *) override;
     void showEvent(QShowEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
@@ -87,6 +89,9 @@ private:
 
     //Whether to display the toolbar when connecting a device.
     bool show_toolbar = true;
+
+    //Whether game mode (cursor lock + keymapping) is active.
+    bool m_gameModeActive = false;
 };
 
 #endif // VIDEOFORM_H
