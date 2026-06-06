@@ -58,8 +58,6 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
 
-    bool eventFilter(QObject *obj, QEvent *event) override;
-
     void paintEvent(QPaintEvent *) override;
     void showEvent(QShowEvent *event) override;
     void resizeEvent(QResizeEvent *event) override;
@@ -95,5 +93,3 @@ private:
 };
 
 #endif // VIDEOFORM_H
-
- 
